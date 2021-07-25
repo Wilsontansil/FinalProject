@@ -24,7 +24,7 @@ public class GameManagerDotRun : MonoBehaviour
     public float timeAdditionObstcle;
     //public float timeAdditionPoint;
     public GameStateDotRun gameState;
-
+    bool isFinishSendData;
     UserInformationScript userInfo;
     [Header("Panel")]
     [SerializeField] GameObject panelGameOver;
@@ -38,9 +38,11 @@ public class GameManagerDotRun : MonoBehaviour
     private void Start()
     {
         setGameRestart();
+
     }
     void setGameRestart()
     {
+        isFinishSendData = false;
         _GameSpeed = 2;
         _timeMain = 0;
         _timeSecond = 0;
@@ -110,7 +112,7 @@ public class GameManagerDotRun : MonoBehaviour
     }
     IEnumerator CountDownGameOver()
     {
-        yield return new WaitForSeconds(2f);
+
         if (userInfo.highScore < DotRunController.score)
         {
             //PlayerPrefs.SetInt("ColorDotHighScore", ScoreManager.ScoreGame);
@@ -126,8 +128,9 @@ public class GameManagerDotRun : MonoBehaviour
         }
         panelGameOver.GetComponent<PanelGameOverManagement>().txtScoreBoard.text = DotRunController.score.ToString();
         panelGameOver.SetActive(true);
+        yield return new WaitUntil(() => isFinishSendData);
         panelGameOver.GetComponent<PanelGameOverManagement>().OpenGameOverBox();
-        StopCoroutine(CountDownGameOver());
+        StopAllCoroutines();
     }
 
     IEnumerator UpdateScoreGame(int newScore)
@@ -143,15 +146,26 @@ public class GameManagerDotRun : MonoBehaviour
             if (www.isNetworkError || www.isHttpError)
             {
                 Debug.Log(www.error);
+                if (userInfo.highScore < DotRunController.score)
+                {
+                    StartCoroutine(UpdateScoreGame(DotRunController.score));
+                    userInfo.highScore = DotRunController.score;
+                    panelGameOver.GetComponent<PanelGameOverManagement>().txtHighScore.text = DotRunController.score.ToString();
 
+                }
+                else
+                {
+                    StartCoroutine(UpdateScoreGame(userInfo.highScore));
+                    panelGameOver.GetComponent<PanelGameOverManagement>().txtHighScore.text = userInfo.highScore.ToString();
+                }
             }
             else
             {
                 Debug.Log("Sucess Update");
 
-
+                isFinishSendData = true;
             }
         }
-        StopAllCoroutines();
+
     }
 }

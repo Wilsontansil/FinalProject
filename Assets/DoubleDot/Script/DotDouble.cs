@@ -19,6 +19,7 @@ public class DotDouble : MonoBehaviour
     public bool Rotate;
     float screenBounds;
     int score;
+    bool isFinishSendData;
     public DotDoubleState state;
     [SerializeField] GameObject txtPress;
     [SerializeField] TextMeshProUGUI txtScore;
@@ -41,6 +42,7 @@ public class DotDouble : MonoBehaviour
     }
     void Start()
     {
+        isFinishSendData = false;
         audioSource.clip = clipMusicStart;
         audioSource.Play();
         Rotate = false;
@@ -141,7 +143,7 @@ public class DotDouble : MonoBehaviour
 
     IEnumerator CountDownGameOver()
     {
-        yield return new WaitForSeconds(2f);
+
         if (userInfo.highScore < score)
         {
             StartCoroutine(UpdateScoreGame(score));
@@ -156,8 +158,9 @@ public class DotDouble : MonoBehaviour
         }
         panelGameOver.GetComponent<PanelGameOverManagement>().txtScoreBoard.text = score.ToString();
         panelGameOver.SetActive(true);
+        yield return new WaitUntil(() => isFinishSendData);
         panelGameOver.GetComponent<PanelGameOverManagement>().OpenGameOverBox();
-        StopCoroutine(CountDownGameOver());
+        StopAllCoroutines();
     }
 
     IEnumerator UpdateScoreGame(int newScore)
@@ -174,15 +177,27 @@ public class DotDouble : MonoBehaviour
             {
                 Debug.Log(www.error);
 
+                if (userInfo.highScore < score)
+                {
+                    StartCoroutine(UpdateScoreGame(score));
+                    userInfo.highScore = score;
+                    panelGameOver.GetComponent<PanelGameOverManagement>().txtHighScore.text = score.ToString();
+
+                }
+                else
+                {
+                    StartCoroutine(UpdateScoreGame(userInfo.highScore));
+                    panelGameOver.GetComponent<PanelGameOverManagement>().txtHighScore.text = userInfo.highScore.ToString();
+                }
             }
             else
             {
                 Debug.Log("Sucess Update");
 
-
+                isFinishSendData = true;
             }
         }
-        StopAllCoroutines();
+
     }
 
     void Explode()

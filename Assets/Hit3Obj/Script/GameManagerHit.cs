@@ -35,6 +35,7 @@ public class GameManagerHit : MonoBehaviour
     float timeGame;
     public float timeCombo;
     int scoreGame;
+    bool isFinishSendData;
     public GameStateFeedIt gameState;
 
     bool canMove;
@@ -58,6 +59,7 @@ public class GameManagerHit : MonoBehaviour
     }
     private void Start()
     {
+        isFinishSendData = false;
         pressStart.SetActive(true);
         gameState = GameStateFeedIt.ready;
         timeGame = 30;
@@ -316,7 +318,7 @@ public class GameManagerHit : MonoBehaviour
     }
     IEnumerator CountDownGameOver()
     {
-        yield return new WaitForSeconds(2f);
+
         if (userInfo.highScore < scoreGame)
         {
             //PlayerPrefs.SetInt("ColorDotHighScore", ScoreManager.ScoreGame);
@@ -332,8 +334,9 @@ public class GameManagerHit : MonoBehaviour
         }
         panelGameOver.GetComponent<PanelGameOverManagement>().txtScoreBoard.text = scoreGame.ToString();
         panelGameOver.SetActive(true);
+        yield return new WaitUntil(() => isFinishSendData);
         panelGameOver.GetComponent<PanelGameOverManagement>().OpenGameOverBox();
-        StopCoroutine(CountDownGameOver());
+        StopAllCoroutines();
     }
 
     IEnumerator UpdateScoreGame(int newScore)
@@ -350,14 +353,27 @@ public class GameManagerHit : MonoBehaviour
             {
                 Debug.Log(www.error);
 
+                if (userInfo.highScore < scoreGame)
+                {
+                    //PlayerPrefs.SetInt("ColorDotHighScore", ScoreManager.ScoreGame);
+                    StartCoroutine(UpdateScoreGame(scoreGame));
+                    userInfo.highScore = scoreGame;
+                    panelGameOver.GetComponent<PanelGameOverManagement>().txtHighScore.text = scoreGame.ToString();
+
+                }
+                else
+                {
+                    StartCoroutine(UpdateScoreGame(userInfo.highScore));
+                    panelGameOver.GetComponent<PanelGameOverManagement>().txtHighScore.text = userInfo.highScore.ToString();
+                }
             }
             else
             {
                 Debug.Log("Sucess Update");
-
+                isFinishSendData = true;
 
             }
         }
-        StopAllCoroutines();
+
     }
 }
