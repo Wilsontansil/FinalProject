@@ -4,5 +4,5 @@ using UnityEngine;
 
 public class ServerGame : MonoBehaviour
 {
-    public static string serverName = "https://fyp17020014.000webhostapp.com/";
+    public static string serverName = "https://finalyearprojectwilson.000webhostapp.com/";
 }
