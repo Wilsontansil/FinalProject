@@ -83,7 +83,7 @@ public class LoadingManager : MonoBehaviour
     {
         StartCoroutine(NetworkConnection.CheckImei(PlayerPrefs.GetInt("UserID")));
         StartCoroutine(CoundownDonnection());
-        Debug.LogError(PlayerPrefs.GetInt("UserID") + " " + CheckLogIN());
+        Debug.Log(PlayerPrefs.GetInt("UserID") + " " + CheckLogIN());
     }
     IEnumerator CoundownDonnection()
     {

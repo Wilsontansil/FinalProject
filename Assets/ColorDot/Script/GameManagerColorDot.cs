@@ -11,7 +11,7 @@ public class GameManagerColorDot : MonoBehaviour
     public List<Color> ColorList;
     public int posYObstacle;
     public int posYChangColor;
-
+    bool IsFinishSendData;
     [Header("Panel")]
     [SerializeField] GameObject panelGameOver;
     [SerializeField] GameObject panelPopUpError;
@@ -38,6 +38,7 @@ public class GameManagerColorDot : MonoBehaviour
 
     private void Start()
     {
+        IsFinishSendData = false;
         scoreManager.RestartGameScore();
         colorManager();
         instantiateObstacle();
@@ -97,7 +98,7 @@ public class GameManagerColorDot : MonoBehaviour
 
     IEnumerator CountDownGameOver()
     {
-        yield return new WaitForSeconds(2f);
+
         if (userInfo.highScore < ScoreManager.ScoreGame)
         {
             //PlayerPrefs.SetInt("ColorDotHighScore", ScoreManager.ScoreGame);
@@ -113,8 +114,9 @@ public class GameManagerColorDot : MonoBehaviour
         }
         panelGameOver.GetComponent<PanelGameOverManagement>().txtScoreBoard.text = ScoreManager.ScoreGame.ToString();
         panelGameOver.SetActive(true);
+        yield return new WaitUntil(() => IsFinishSendData);
         panelGameOver.GetComponent<PanelGameOverManagement>().OpenGameOverBox();
-        StopCoroutine(CountDownGameOver());
+        StopAllCoroutines();
     }
     void DestroyObstacle()
     {
@@ -138,16 +140,27 @@ public class GameManagerColorDot : MonoBehaviour
             if (www.isNetworkError || www.isHttpError)
             {
                 Debug.Log(www.error);
+                if (userInfo.highScore < ScoreManager.ScoreGame)
+                {
+                    StartCoroutine(UpdateScoreGame(ScoreManager.ScoreGame));
+                    userInfo.highScore = ScoreManager.ScoreGame;
+                    panelGameOver.GetComponent<PanelGameOverManagement>().txtHighScore.text = ScoreManager.ScoreGame.ToString();
 
+                }
+                else
+                {
+                    StartCoroutine(UpdateScoreGame(userInfo.highScore));
+                    panelGameOver.GetComponent<PanelGameOverManagement>().txtHighScore.text = userInfo.highScore.ToString();
+                }
             }
             else
             {
                 Debug.Log("Sucess Update");
-
+                IsFinishSendData = true;
 
             }
         }
-        StopAllCoroutines();
+
     }
     #endregion
 }

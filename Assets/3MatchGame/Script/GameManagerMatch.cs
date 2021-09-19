@@ -23,7 +23,7 @@ public class GameManagerMatch : MonoBehaviour
     public List<GameObject> fruitInGame;
     bool isPress;
     bool canMove;
-    bool isPopUp;
+    bool isFinsihSendData;
     bool gameover;
     int scoreGame;
     [SerializeField] TextMeshProUGUI txtScore;
@@ -53,7 +53,7 @@ public class GameManagerMatch : MonoBehaviour
         InvokeRepeating("GenerateRandom", 1, .5f);
         canMove = false;
         isPress = false;
-        isPopUp = false;
+        isFinsihSendData = false;
         gameover = false;
     }
 
@@ -253,7 +253,7 @@ public class GameManagerMatch : MonoBehaviour
     }
     IEnumerator CountDownGameOver()
     {
-        yield return new WaitForSeconds(2f);
+
         if (userInfo.highScore < scoreGame)
         {
             //PlayerPrefs.SetInt("ColorDotHighScore", ScoreManager.ScoreGame);
@@ -269,8 +269,10 @@ public class GameManagerMatch : MonoBehaviour
         }
         panelGameOver.GetComponent<PanelGameOverManagement>().txtScoreBoard.text = scoreGame.ToString();
         panelGameOver.SetActive(true);
+
+        yield return new WaitUntil(()=>isFinsihSendData);
         panelGameOver.GetComponent<PanelGameOverManagement>().OpenGameOverBox();
-        StopCoroutine(CountDownGameOver());
+        StopAllCoroutines();
     }
 
     IEnumerator UpdateScoreGame(int newScore)
@@ -286,15 +288,26 @@ public class GameManagerMatch : MonoBehaviour
             if (www.isNetworkError || www.isHttpError)
             {
                 Debug.Log(www.error);
+                if (userInfo.highScore < scoreGame)
+                {
+                    StartCoroutine(UpdateScoreGame(scoreGame));
+                    userInfo.highScore = scoreGame;
+                    panelGameOver.GetComponent<PanelGameOverManagement>().txtHighScore.text = scoreGame.ToString();
 
+                }
+                else
+                {
+                    StartCoroutine(UpdateScoreGame(userInfo.highScore));
+                    panelGameOver.GetComponent<PanelGameOverManagement>().txtHighScore.text = userInfo.highScore.ToString();
+                }
             }
             else
             {
                 Debug.Log("Sucess Update");
-
+                isFinsihSendData = true;
 
             }
         }
-        StopAllCoroutines();
+
     }
 }

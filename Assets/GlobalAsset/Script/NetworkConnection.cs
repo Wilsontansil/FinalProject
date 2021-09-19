@@ -41,7 +41,7 @@ public class NetworkConnection : MonoBehaviour
             else
             {
                 NetworkConnection.ImeiServer = www.downloadHandler.text;
-                Debug.LogError(NetworkConnection.ImeiServer);
+                Debug.Log(NetworkConnection.ImeiServer);
 
 
             }

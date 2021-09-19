@@ -70,15 +70,16 @@ public class Configuration : MonoBehaviour
             if (www.isNetworkError || www.isHttpError)
             {
                 Debug.Log(www.error);
-
+                StartCoroutine(LogIn());
             }
             else
             {
                 ProcessJsonData(www.downloadHandler.text);
+
+                StopCoroutine(LogIn());
             }
         }
 
-        StopCoroutine(LogIn());
     }
 
     IEnumerator UpdateImei(string status)

@@ -38,27 +38,32 @@ public class SendMessage : MonoBehaviour {
     {
         userinfo = FindObjectOfType<UserInformationScript>();
     }
-    private void OnEnable()
+    private void Start()
     {
         ExecutePubNub();
+
     }
-    private void OnDisable()
-    {
-        foreach (Transform item in canvasObject.transform)
-        {
-            Destroy(item.gameObject);
-        }
-    }
+    //private void OnEnable()
+    //{
+    //    ExecutePubNub();
+    //}
+    //private void OnDisable()
+    //{
+    //    foreach (Transform item in canvasObject.transform)
+    //    {
+    //        Destroy(item.gameObject);
+    //    }
+    //}
     void ExecutePubNub()
     {
         // Use this for initialization
+
         PNConfiguration pnConfiguration = new PNConfiguration();
         pnConfiguration.PublishKey = "pub-c-d0e3af64-196f-4be6-a34e-e8a3aa606f7a";
         pnConfiguration.SubscribeKey = "sub-c-0e24d83e-c464-11eb-9e40-ea6857a81ff7";
         pnConfiguration.LogVerbosity = PNLogVerbosity.BODY;
         pnConfiguration.UUID = System.Guid.NewGuid().ToString();
         pubnub = new PubNub(pnConfiguration);
-
         // Add Listener to Submit button to send messages
         Button btn = SubmitButton.GetComponent<Button>();
 
@@ -76,6 +81,7 @@ public class SendMessage : MonoBehaviour {
                         " FetchMessages Error: {0} {1} {2}",
                         status.StatusCode, status.ErrorData, status.Category
                     ));
+                    ExecutePubNub();
                 }
                 else
                 {

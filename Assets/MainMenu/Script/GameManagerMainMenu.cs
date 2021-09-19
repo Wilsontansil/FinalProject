@@ -524,6 +524,7 @@ public class GameManagerMainMenu : MonoBehaviour
         if (www.isNetworkError)
         {
             Debug.LogError("Errror Connection");
+            StartCoroutine(GetLeaderboardColorDot());
         }
         else
         {
@@ -531,9 +532,10 @@ public class GameManagerMainMenu : MonoBehaviour
             {
                 Debug.Log(www.downloadHandler.text);
                 ProcessJsonData(www.downloadHandler.text);
+                StopCoroutine(GetLeaderboardColorDot());
             }
         }
-        StopCoroutine(GetLeaderboardColorDot());
+
     }
 
     IEnumerator GetLeaderboardDotRun()
@@ -543,6 +545,7 @@ public class GameManagerMainMenu : MonoBehaviour
         if (www.isNetworkError)
         {
             Debug.LogError("Errror Connection");
+            StartCoroutine(GetLeaderboardDotRun());
         }
         else
         {
@@ -550,9 +553,10 @@ public class GameManagerMainMenu : MonoBehaviour
             {
                 Debug.Log(www.downloadHandler.text);
                 ProcessJsonData(www.downloadHandler.text);
+                StopCoroutine(GetLeaderboardColorDot());
             }
         }
-        StopCoroutine(GetLeaderboardColorDot());
+
     }
 
     IEnumerator GetLeaderboardMatchFruit()
@@ -562,15 +566,17 @@ public class GameManagerMainMenu : MonoBehaviour
         if (www.isNetworkError)
         {
             Debug.LogError("Errror Connection");
+            StartCoroutine(GetLeaderboardMatchFruit());
         }
         else
         {
             if (www.isDone)
             {
                 ProcessJsonData(www.downloadHandler.text);
+                StopCoroutine(GetLeaderboardMatchFruit());
             }
         }
-        StopCoroutine(GetLeaderboardMatchFruit());
+
     }
     IEnumerator GetLeaderboardDoubleDot()
     {
@@ -579,15 +585,17 @@ public class GameManagerMainMenu : MonoBehaviour
         if (www.isNetworkError)
         {
             Debug.LogError("Errror Connection");
+            StartCoroutine(GetLeaderboardDoubleDot());
         }
         else
         {
             if (www.isDone)
             {
                 ProcessJsonData(www.downloadHandler.text);
+                StopCoroutine(GetLeaderboardDoubleDot());
             }
         }
-        StopCoroutine(GetLeaderboardDoubleDot());
+
     }
 
     IEnumerator GetLeaderboardFeedIt()
@@ -597,15 +605,17 @@ public class GameManagerMainMenu : MonoBehaviour
         if (www.isNetworkError)
         {
             Debug.LogError("Errror Connection");
+            StartCoroutine(GetLeaderboardFeedIt());
         }
         else
         {
             if (www.isDone)
             {
                 ProcessJsonData(www.downloadHandler.text);
+                StopCoroutine(GetLeaderboardFeedIt());
             }
         }
-        StopCoroutine(GetLeaderboardFeedIt());
+
     }
     IEnumerator GetImageLink()
     {
@@ -614,6 +624,7 @@ public class GameManagerMainMenu : MonoBehaviour
         if (www.isNetworkError)
         {
             Debug.LogError("Errror Connection");
+            StartCoroutine(GetImageLink());
         }
         else
         {
@@ -621,6 +632,7 @@ public class GameManagerMainMenu : MonoBehaviour
             {
                 Debug.Log(www.downloadHandler.text);
                 ProcessJsonDataEvent(www.downloadHandler.text);
+                StopCoroutine(GetImageLink());
             }
         }
         //for (int i = 0; i < linkEvent.Count; i++)
@@ -641,7 +653,7 @@ public class GameManagerMainMenu : MonoBehaviour
         }
 
         //StartCoroutine(setImage());
-        StopCoroutine(GetImageLink());
+
 
 
     }
