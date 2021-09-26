@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.SceneManagement;
 
 public class GameManagerColorDot : MonoBehaviour
 {
@@ -15,6 +16,7 @@ public class GameManagerColorDot : MonoBehaviour
     [Header("Panel")]
     [SerializeField] GameObject panelGameOver;
     [SerializeField] GameObject panelPopUpError;
+    [SerializeField] GameObject mainMenu;
 
     [Header("Game Manager")]
     ScoreManager scoreManager;
@@ -126,6 +128,19 @@ public class GameManagerColorDot : MonoBehaviour
         }
     }
 
+    public void MainMenu()
+    {
+        mainMenu.SetActive(true);
+        LeanTween.scale(mainMenu.transform.GetChild(0).gameObject, Vector3.one, .5f).setEase(LeanTweenType.easeOutCubic);
+    }
+    public void CloseMainMenu()
+    {
+        LeanTween.scale(mainMenu.transform.GetChild(0).gameObject, Vector3.zero, .3f).setEase(LeanTweenType.easeInCubic).setOnComplete(() => mainMenu.SetActive(false));
+    }
+    public void BackMainMenu()
+    {
+        SceneManager.LoadScene("MainMenu");
+    }
     #region WWW Web
     IEnumerator UpdateScoreGame(int newScore)
     {

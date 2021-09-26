@@ -12,6 +12,10 @@ public class PanelGameOverManagement : MonoBehaviour
     {
         LeanTween.scale(BoxGameOver, Vector3.one, .8f).setEase(LeanTweenType.easeOutCubic);
     }
+    public void BackToMenu()
+    {
+        
+    }
 
     public void MainMenu()
     {

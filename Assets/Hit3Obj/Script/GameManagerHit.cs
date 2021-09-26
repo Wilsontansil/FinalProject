@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.Networking;
+using UnityEngine.SceneManagement;
 
 public enum GameStateFeedIt
 {
@@ -29,6 +30,7 @@ public class GameManagerHit : MonoBehaviour
     [SerializeField] GameObject combo10;
     [SerializeField] GameObject Nice;
     [SerializeField] GameObject Excellent;
+    [SerializeField] GameObject mainMenu;
 
     [Header("Game Logic")]
     int combo;
@@ -375,5 +377,18 @@ public class GameManagerHit : MonoBehaviour
             }
         }
 
+    }
+    public void MainMenu()
+    {
+        mainMenu.SetActive(true);
+        LeanTween.scale(mainMenu.transform.GetChild(0).gameObject, Vector3.one, .5f).setEase(LeanTweenType.easeOutCubic);
+    }
+    public void CloseMainMenu()
+    {
+        LeanTween.scale(mainMenu.transform.GetChild(0).gameObject, Vector3.zero, .3f).setEase(LeanTweenType.easeInCubic).setOnComplete(() => mainMenu.SetActive(false));
+    }
+    public void BackMainMenu()
+    {
+        SceneManager.LoadScene("MainMenu");
     }
 }

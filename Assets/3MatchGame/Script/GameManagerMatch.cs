@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.Networking;
+using UnityEngine.SceneManagement;
 
 public class GameManagerMatch : MonoBehaviour
 {
@@ -30,6 +31,8 @@ public class GameManagerMatch : MonoBehaviour
     [SerializeField] TextMeshProUGUI txtMove;
     [SerializeField] GameObject panelGameOver;
     UserInformationScript userInfo;
+    [SerializeField] GameObject mainMenu;
+
     [Header("GameSound")]
     [SerializeField] AudioClip clipSqueeze;
     [SerializeField] AudioClip clipFall;
@@ -309,5 +312,20 @@ public class GameManagerMatch : MonoBehaviour
             }
         }
 
+    }
+
+
+    public void MainMenu()
+    {
+        mainMenu.SetActive(true);
+        LeanTween.scale(mainMenu.transform.GetChild(0).gameObject, Vector3.one, .5f).setEase(LeanTweenType.easeOutCubic);
+    }
+    public void CloseMainMenu()
+    {
+        LeanTween.scale(mainMenu.transform.GetChild(0).gameObject, Vector3.zero, .3f).setEase(LeanTweenType.easeInCubic).setOnComplete(()=> mainMenu.SetActive(false));
+    }
+    public void BackMainMenu()
+    {
+        SceneManager.LoadScene("MainMenu");
     }
 }

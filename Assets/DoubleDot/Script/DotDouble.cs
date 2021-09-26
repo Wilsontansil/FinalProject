@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.Networking;
+using UnityEngine.SceneManagement;
 
 public enum DotDoubleState
 {
@@ -35,6 +36,7 @@ public class DotDouble : MonoBehaviour
     [SerializeField] AudioClip clipMusicStart;
     [SerializeField] AudioClip clipMusicGo;
     [SerializeField] AudioClip clipPoint;
+    [SerializeField] GameObject mainMenu;
 
     private void Awake()
     {
@@ -217,5 +219,17 @@ public class DotDouble : MonoBehaviour
         Destroy(gb, 5f);
         LeanAudio.play(clipPoint);
     }
-
+    public void MainMenu()
+    {
+        mainMenu.SetActive(true);
+        LeanTween.scale(mainMenu.transform.GetChild(0).gameObject, Vector3.one, .5f).setEase(LeanTweenType.easeOutCubic);
+    }
+    public void CloseMainMenu()
+    {
+        LeanTween.scale(mainMenu.transform.GetChild(0).gameObject, Vector3.zero, .3f).setEase(LeanTweenType.easeInCubic).setOnComplete(() => mainMenu.SetActive(false));
+    }
+    public void BackMainMenu()
+    {
+        SceneManager.LoadScene("MainMenu");
+    }
 }

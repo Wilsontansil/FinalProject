@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.Networking;
+using UnityEngine.SceneManagement;
 
 public enum GameStateDotRun
 {
@@ -29,6 +30,7 @@ public class GameManagerDotRun : MonoBehaviour
     [Header("Panel")]
     [SerializeField] GameObject panelGameOver;
     [SerializeField] GameObject panelPopUpError;
+    [SerializeField] GameObject mainMenu;
 
     private void Awake()
     {
@@ -167,5 +169,19 @@ public class GameManagerDotRun : MonoBehaviour
             }
         }
 
+    }
+
+    public void MainMenu()
+    {
+        mainMenu.SetActive(true);
+        LeanTween.scale(mainMenu.transform.GetChild(0).gameObject, Vector3.one, .5f).setEase(LeanTweenType.easeOutCubic);
+    }
+    public void CloseMainMenu()
+    {
+        LeanTween.scale(mainMenu.transform.GetChild(0).gameObject, Vector3.zero, .3f).setEase(LeanTweenType.easeInCubic).setOnComplete(() => mainMenu.SetActive(false));
+    }
+    public void BackMainMenu()
+    {
+        SceneManager.LoadScene("MainMenu");
     }
 }
